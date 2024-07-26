@@ -176,7 +176,7 @@ async def send(interaction: discord.Interaction, msg: str, channel:discord.TextC
 async def question(interaction: discord.Interaction, question:str):
   channelid=1264578504507392032
   if interaction.channel.id == channelid:
-    quemb = discord.Embed(title="[NEW QUESTION REQUEST!!!]", description= f"A new question has been asked, if you have an answer, ping the user in the general chat!\n\n> **Question**\n```\n{question}\n```\n> For any queries, message Haveen. To ask a question, use the command **/question <question>**, someone will answer shortly!")
+    quemb = discord.Embed(title="[NEW QUESTION REQUEST!!!]", description= f"A new question has been asked by {interactiom.user.mention}, if you have an answer, ping the user in the general chat!\n\n> **Question**\n```\n{question}\n```\n> For any queries, message Haveen. To ask a question, use the command **/question <question>**, someone will answer shortly!")
     quemb.set_footer(text=f"Question asked by {interaction.user.name}")
     await interaction.response.send_message(embed=quemb)
   else:
@@ -185,5 +185,16 @@ async def question(interaction: discord.Interaction, question:str):
     await interaction.response.send_message(embed=wrongchan)
     
     await interaction.channel.send(embed=quemb)
+
+
+@client.tree.command(name =  "question")
+async def question(interaction: discord.Interaction, answer:str, messageid:str):
+    fetchQu = await client.fetch_message(int(messageid))
+    cont = fetchQu.content
+    answerEm = discord.Embed(title="[NEW ANSWER TO QUESTION]", description=f"A new answer has been submitted by {interaction.user.mention}:\n\nQuestion:\n```\n{fetchQu}\n```\n\nAnswer:\n```\n{answer}\n```\n\nAny queries DM me (Haveen).")
+    channelidxd=1264578504507392032
+    await client.get_channel(channelidxd).send(embed=answerEm)
+
+
 
 client.run(os.environ['token'])
